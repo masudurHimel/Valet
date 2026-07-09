@@ -678,7 +678,15 @@ final class MenuBarManager {
     func endTemporaryReveal() {
         guard let previous = stateBeforeTemporaryReveal else { return }
         stateBeforeTemporaryReveal = nil
-        if previous == .collapsed { engine.collapse() }
+        switch previous {
+        case .collapsed:
+            engine.collapse()
+        case .revealed:
+            engine.collapse()
+            engine.toggle()  // collapsed -> revealed
+        case .revealedAll:
+            break  // already in .revealedAll
+        }
         apply()
     }
 
