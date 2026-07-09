@@ -1,6 +1,6 @@
-# Valet
+# Valet — a free, open-source Bartender alternative for macOS
 
-Valet is a free, open-source (MIT) **menu bar manager for macOS 14+**. It hides and shows menu bar items on demand, keeping your menu bar tidy without giving up quick access to anything.
+Valet is a free, open-source (MIT) **menu bar manager for macOS 14+** — a **Bartender alternative** that hides and shows menu bar items on demand, keeping your menu bar tidy without giving up quick access to anything. Everything is free (there is no paid tier), everything runs **100% locally**, and the entire codebase is small enough to audit in an afternoon.
 
 ## Features
 
@@ -14,13 +14,31 @@ Valet is a free, open-source (MIT) **menu bar manager for macOS 14+**. It hides 
 - **Multi-display aware** — Valet's control items appear on each display's menu bar
 - **Manual-only update check** — the single network request in the entire app, and it never fires unless you click the button
 
-## Privacy
+## Valet vs. Bartender
 
-Everything Valet does stays on your Mac.
+If you're looking for a Bartender alternative, here's the honest picture. Valet covers the core menu-bar management workflow today, with the rest of the feature set on a public roadmap ([FEATURES.md](FEATURES.md)):
+
+| Capability | Bartender (paid) | Valet (free) |
+| --- | --- | --- |
+| Hide/show menu bar items, Shown + Hidden + Always Hidden sections | ✅ | ✅ |
+| Global hotkey, auto-rehide, click to toggle | ✅ | ✅ |
+| Item list with real icons, drag between sections | ✅ | ✅ |
+| Auto-handling of newly appearing items | ✅ | ✅ |
+| Show items on hover/swipe, menu bar item search | ✅ | 🔜 roadmap |
+| Triggers (battery, Wi-Fi, app-based) | ✅ | 🔜 roadmap |
+| Menu bar styling, secondary bar | ✅ | 🔜 roadmap |
+| Price | Paid license | Free forever (MIT) |
+| Source code | Closed | Open — audit every line |
+| Network traffic | — | None, except the update button **you** click |
+
+## Privacy & security
+
+Everything Valet does stays on your Mac, and the attack surface is deliberately tiny and fully auditable:
 
 - **No analytics, no telemetry, no background network activity.** The only network request the app can make is the manual **Check for Updates** button in Settings → About, which fetches the latest release info from GitHub — and only when you click it.
 - **Settings contain no personal data.** Valet stores only app identifiers (bundle IDs of your menu bar apps) and your preferences (hotkey, delays, section assignments) in its own `UserDefaults` domain.
 - **Menu bar item images stay in memory.** Icons captured for the Settings item list are never written to disk and never leave the app.
+- **No known security issues, and easy to verify.** Zero third-party dependencies, no dynamic code loading, and exactly one file that can touch the network (`Sources/Valet/Settings/UpdateChecker.swift`) — you can confirm each of these claims yourself with a few greps. Every release passes an adversarial code review and the [TESTING.md](TESTING.md) checklist before it is tagged.
 
 ## Install
 
