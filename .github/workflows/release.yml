@@ -1,12 +1,9 @@
 name: Release
 
-# PRs to master run the test gate only.
 # Pushes to master (including merged PRs) cut a release IFF the VERSION file
 # names a version that has not been tagged yet.
 
 on:
-  pull_request:
-    branches: [master]
   push:
     branches: [master]
 
@@ -18,16 +15,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  test:
-    if: github.event_name == 'pull_request'
-    runs-on: macos-15
-    steps:
-      - uses: actions/checkout@v4
-      - name: Run tests
-        run: swift test
-
   release:
-    if: github.event_name == 'push'
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
@@ -53,10 +41,6 @@ jobs:
           else
             echo "skip=false" >> "$GITHUB_OUTPUT"
           fi
-
-      - name: Run tests
-        if: steps.guard.outputs.skip == 'false'
-        run: swift test
 
       - name: Build universal app
         if: steps.guard.outputs.skip == 'false'

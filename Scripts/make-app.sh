@@ -20,8 +20,17 @@ for arg in "$@"; do
 done
 
 if [[ "$UNIVERSAL" == 1 ]]; then
-    swift build -c release --arch arm64 --arch x86_64
-    BIN=".build/apple/Products/Release/Valet"
+    # Build each slice separately and merge with lipo: passing both archs to a
+    # single `swift build` routes through the legacy Xcode build system, which
+    # chokes on .swiftLanguageMode(.v5) under Xcode 16.4.
+    swift build -c release --arch arm64
+    swift build -c release --arch x86_64
+    BIN=".build/universal/Valet"
+    mkdir -p .build/universal
+    lipo -create \
+        "$(swift build -c release --arch arm64 --show-bin-path)/Valet" \
+        "$(swift build -c release --arch x86_64 --show-bin-path)/Valet" \
+        -output "$BIN"
 else
     swift build -c release
     BIN=".build/release/Valet"
