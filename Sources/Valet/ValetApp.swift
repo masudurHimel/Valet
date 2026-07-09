@@ -49,6 +49,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         menuBarManager.onOpenSettings = { [weak self] in
             self?.settingsWindow.show(tab: .items)
         }
+
+        let hasOnboarded = UserDefaults.standard.bool(forKey: "hasOnboarded")
+        if !hasOnboarded {
+            UserDefaults.standard.set(true, forKey: "hasOnboarded")
+            settingsWindow.show(tab: .permissions)
+        }
     }
 
     private func applyHotkey(_ hotkey: Hotkey?) {

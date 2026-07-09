@@ -8,14 +8,14 @@ Status legend: `[ ]` planned · `[~]` in progress · `[x]` done (tests + manual 
 - [x] Hide/show via expanding spacer
 - [x] Three sections: Shown / Hidden / Always Hidden
 - [x] Toggle by clicking the chevron
-- [ ] Global hotkey toggle
+- [x] Global hotkey toggle
 - [x] Auto-rehide after configurable delay
 - [x] Item introspection (CGWindowList enumeration)
 - [x] Item image capture (ScreenCaptureKit, in-memory only)
 - [x] Settings UI: item list with images, drag-to-assign sections
 - [~] Settings UI: behavior / hotkeys / permissions / about tabs
 - [x] Move items between sections via simulated Cmd-drag
-- [ ] Permissions onboarding with graceful degradation
+- [x] Permissions onboarding with graceful degradation
 - [x] Launch at login (SMAppService)
 - [x] Multi-display basics (control items on active display)
 - [ ] Manual "Check for Updates" button (only network call in the app)

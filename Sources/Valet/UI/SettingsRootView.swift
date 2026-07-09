@@ -14,10 +14,10 @@ struct SettingsRootView: View {
             BehaviorView(store: store)
                 .tabItem { Label("Behavior", systemImage: "gearshape") }
                 .tag(SettingsTab.behavior)
-            Text("Hotkeys")
+            HotkeyRecorderView(store: store)
                 .tabItem { Label("Hotkeys", systemImage: "keyboard") }
                 .tag(SettingsTab.hotkeys)
-            Text("Permissions")
+            PermissionsView()
                 .tabItem { Label("Permissions", systemImage: "lock.shield") }
                 .tag(SettingsTab.permissions)
             Text("About")
