@@ -20,7 +20,7 @@ struct SettingsRootView: View {
             PermissionsView()
                 .tabItem { Label("Permissions", systemImage: "lock.shield") }
                 .tag(SettingsTab.permissions)
-            Text("About")
+            AboutView()
                 .tabItem { Label("About", systemImage: "info.circle") }
                 .tag(SettingsTab.about)
         }

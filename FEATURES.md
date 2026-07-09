@@ -13,12 +13,12 @@ Status legend: `[ ]` planned · `[~]` in progress · `[x]` done (tests + manual 
 - [x] Item introspection (CGWindowList enumeration)
 - [x] Item image capture (ScreenCaptureKit, in-memory only)
 - [x] Settings UI: item list with images, drag-to-assign sections
-- [~] Settings UI: behavior / hotkeys / permissions / about tabs
+- [x] Settings UI: behavior / hotkeys / permissions / about tabs
 - [x] Move items between sections via simulated Cmd-drag
 - [x] Permissions onboarding with graceful degradation
 - [x] Launch at login (SMAppService)
 - [x] Multi-display basics (control items on active display)
-- [ ] Manual "Check for Updates" button (only network call in the app)
+- [x] Manual "Check for Updates" button (only network call in the app)
 - [x] Local-only settings storage (bundle IDs + prefs, no PII)
 
 ## Phase 2 — Reveal & search
