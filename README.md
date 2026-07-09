@@ -35,8 +35,8 @@ That right-click step is needed because Valet is **not notarized** — it is bui
 Requires only the **Xcode Command Line Tools** (`xcode-select --install`) — no Xcode, no dependencies.
 
 ```bash
-git clone https://github.com/valet-menu/valet.git
-cd valet
+git clone https://github.com/masudurHimel/Valet.git
+cd Valet
 Scripts/make-app.sh
 open build/Valet.app
 ```
@@ -44,8 +44,6 @@ open build/Valet.app
 `Scripts/make-app.sh` builds a release binary with Swift Package Manager, assembles `build/Valet.app`, and ad-hoc signs it. Pass `--universal` for an arm64 + x86_64 binary, and `--install` to copy the result to `/Applications` and launch it (quitting any running copy first). Run the tests with `swift test`.
 
 > Heads-up when rebuilding: each build re-signs the app with a new ad-hoc signature, which makes macOS forget its Screen Recording/Accessibility grants — re-grant them in System Settings after installing an update you built yourself.
-
-> Note: the repository URL above will be finalized when the project is published; it matches the slug the in-app update checker uses.
 
 ## Usage
 

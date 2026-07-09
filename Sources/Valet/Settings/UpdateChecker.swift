@@ -29,7 +29,7 @@ struct SemVer: Comparable, Equatable {
 /// THE ONLY NETWORK CODE IN VALET. Runs exclusively when the user clicks
 /// "Check for Updates" in the About tab. One GET to the GitHub Releases API.
 final class UpdateChecker {
-    static let repoSlug = "valet-menu/valet"  // update when the public repo exists
+    static let repoSlug = "masudurHimel/Valet"
     static let currentVersion = "0.1.0"
 
     enum Status: Equatable {
