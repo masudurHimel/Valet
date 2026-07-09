@@ -69,7 +69,16 @@ jobs:
             echo ""
             echo "1. Download \`Valet-$VERSION.zip\` below and unzip it."
             echo "2. Move \`Valet.app\` to \`/Applications\`."
-            echo "3. First launch: **right-click \`Valet.app\` → Open**, then confirm (the app is ad-hoc signed, not notarized)."
+            echo "3. Open \`Valet.app\`."
+            echo ""
+            echo "> [!NOTE]"
+            echo "> On first launch, macOS may warn that it *\"could not verify Valet is free of malware\"*. **This is expected and the app is completely safe** — Valet is open source and built by GitHub Actions straight from this repository, but it is not notarized by Apple (notarization requires a paid developer account). The warning only offers **Done** and **Move to Bin**, so:"
+            echo ">"
+            echo "> 1. Click **Done** (not Move to Bin)."
+            echo "> 2. Open **System Settings → Privacy & Security**, scroll down to *\"Valet\" was blocked to protect your Mac*, and click **Open Anyway**."
+            echo "> 3. Confirm, and Valet launches. This is needed only once."
+            echo ">"
+            echo "> Alternatively, run \`xattr -d com.apple.quarantine /Applications/Valet.app\` in Terminal and open the app normally."
           } >> notes.md
 
       - name: Tag and release

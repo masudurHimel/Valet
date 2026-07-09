@@ -44,9 +44,18 @@ Everything Valet does stays on your Mac, and the attack surface is deliberately 
 
 1. Download the latest release zip and unzip it.
 2. Move `Valet.app` to `/Applications`.
-3. The first time, **right-click (or Control-click) `Valet.app` and choose "Open"**, then confirm in the dialog.
+3. Open `Valet.app`.
 
-That right-click step is needed because Valet is **not notarized** — it is built and ad-hoc signed without an Apple developer account, so Gatekeeper will refuse a plain double-click on first launch. The entire source is right here: you can audit it and build it yourself (below) if you prefer not to trust a downloaded binary.
+> [!NOTE]
+> On first launch, macOS may warn that it *"could not verify Valet is free of malware"*. **This is expected and the app is completely safe** — Valet is open source and built by GitHub Actions straight from this repository, but it is not notarized by Apple (notarization requires a paid developer account). The warning only offers **Done** and **Move to Bin**, so:
+>
+> 1. Click **Done** (not Move to Bin).
+> 2. Open **System Settings → Privacy & Security**, scroll down to *"Valet" was blocked to protect your Mac*, and click **Open Anyway**.
+> 3. Confirm, and Valet launches. This is needed only once.
+>
+> Alternatively, run `xattr -d com.apple.quarantine /Applications/Valet.app` in Terminal and open the app normally.
+>
+> The entire source is right here: you can audit it and build it yourself (below) if you prefer not to trust a downloaded binary.
 
 ## Build from source
 
