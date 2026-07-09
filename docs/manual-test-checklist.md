@@ -19,21 +19,21 @@ Notes before you start:
 
 ## App skeleton (Task 1)
 
-1. Launch `build/Valet.app`: a chevron icon appears in the menu bar and **no Dock icon** appears.
+1. Launch `build/Valet.app`: the Valet button (⋯) appears in the menu bar and **no Dock icon** appears.
 2. `codesign -dv build/Valet.app` reports `Signature=adhoc`.
 
 ## Control items, hide/show, auto-rehide (Task 5)
 
-3. On launch, the chevron and one visible `|` separator appear. The always-hidden separator (and anything left of the hidden separator) is pushed off-screen — collapsed is the default.
-4. Option-click the chevron to reveal everything (so both `|` separators are on screen), then Cmd-drag a third-party menu bar icon **between the two `|` separators**.
-5. Click the chevron: hidden items appear and the chevron flips direction. Click again: they hide.
-6. Option-click the chevron: always-hidden items also appear.
+3. On launch, the Valet button and one visible `|` separator appear. The always-hidden separator (and anything left of the hidden separator) is pushed off-screen — collapsed is the default.
+4. Option-click the Valet button to reveal everything (so both `|` separators are on screen), then Cmd-drag a third-party menu bar icon **between the two `|` separators**.
+5. Click the Valet button: hidden items appear and the ⋯ becomes a circled ⋯. Click again: they hide.
+6. Option-click the Valet button: always-hidden items also appear.
 7. Reveal and wait 15 seconds (default delay): the bar auto-collapses.
-8. Right-click the chevron: a menu appears with "Settings…" (opens the settings window) and "Quit Valet" (quits the app).
+8. Right-click the Valet button: a menu appears with "Settings…" (opens the settings window) and "Quit Valet" (quits the app).
 
 ## Settings window + Behavior tab + launch at login (Task 10)
 
-9. Right-click the chevron → "Settings…" opens the settings window with 5 tabs: Items, Behavior, Hotkeys, Permissions, About.
+9. Right-click the Valet button → "Settings…" opens the settings window with 5 tabs: Items, Behavior, Hotkeys, Permissions, About.
 10. Behavior tab: the auto-rehide toggle and delay stepper work, and changed values persist across relaunch.
 11. Launch at login toggle: when the app is **not** in /Applications, toggling it on shows an error message and the toggle reverts. (With the app in /Applications, the toggle sticks and registers with `SMAppService`.)
 
@@ -45,7 +45,7 @@ Notes before you start:
 15. Grant Accessibility, then drag an item row from Shown to Hidden: the real menu bar icon physically moves left of the `|` separator, and the assignment persists after relaunch.
 16. Right-click an item row → "Move to Always Hidden": works the same way (icon moves left of the leftmost separator).
 17. **Without** Accessibility: moving an item shows the orange guidance message and still saves the assignment.
-18. With the Hidden section **empty** (the two separators adjacent), use the Items tab to move an item to Hidden: a plain chevron click reveals it (regression check for the drag-planner clamp — the item must land between the separators, not in Always Hidden).
+18. With the Hidden section **empty** (the two separators adjacent), use the Items tab to move an item to Hidden: a plain click on the Valet button reveals it (regression check for the drag-planner clamp — the item must land between the separators, not in Always Hidden).
 
 ## Hotkeys tab, Permissions tab, onboarding (Task 12)
 
@@ -61,7 +61,7 @@ Notes before you start:
 
 ## Cross-cutting
 
-25. **Multi-display:** on a second display (if available), the chevron and separators replicate, and toggling works there too.
+25. **Multi-display:** on a second display (if available), the Valet button and separators replicate, and toggling works there too.
 26. **Relaunch persistence:** section assignments, the recorded hotkey, and behavior settings (auto-rehide, delay, launch at login) all survive quitting and relaunching.
 27. **Permission-revoked degradation:** with both permissions granted and the app running, revoke Screen Recording and Accessibility in System Settings → Privacy & Security. The app must not crash: the Items tab falls back to the yellow banner and generic icons, and moving items shows the orange guidance message while still saving assignments.
 28. **Items list stability (regression):** open Settings → Items, then (a) leave the bar collapsed with at least one item assigned to Hidden, and (b) put another app into full screen and come back. In both cases, wait at least 10 seconds: no rows may disappear from the list. (Regression check for the on-screen-only enumeration bug that emptied the list whenever the menu bar wasn't displayed.)

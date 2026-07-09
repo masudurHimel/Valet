@@ -117,8 +117,9 @@ final class MenuBarManager {
         let lengths = engine.spacerLengths
         hiddenSeparator.length = lengths.hidden
         alwaysHiddenSeparator.length = lengths.alwaysHidden
+        // Three dots to echo the app icon; circled while revealed as a state cue.
         chevronItem.button?.image = NSImage(
-            systemSymbolName: engine.state == .collapsed ? "chevron.left" : "chevron.right",
+            systemSymbolName: engine.state == .collapsed ? "ellipsis" : "ellipsis.circle",
             accessibilityDescription: "Valet"
         )
         scheduleRehide()

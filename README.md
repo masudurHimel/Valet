@@ -5,8 +5,8 @@ Valet is a free, open-source (MIT) **menu bar manager for macOS 14+**. It hides 
 ## Features
 
 - **Three sections** for your menu bar items: **Shown**, **Hidden**, and **Always Hidden**
-- **One-click toggle** — click Valet's chevron to reveal or hide the Hidden section
-- **Option-click** the chevron to also reveal the Always Hidden section
+- **One-click toggle** — click Valet's ⋯ button to reveal or hide the Hidden section
+- **Option-click** the Valet button to also reveal the Always Hidden section
 - **Global hotkey** to toggle from anywhere (recordable in Settings → Hotkeys)
 - **Auto-rehide** after a configurable delay (default 15 seconds, adjustable or off)
 - **Settings window** with a live list of your menu bar items — drag rows between sections and Valet moves the real icons for you
@@ -49,11 +49,11 @@ open build/Valet.app
 
 ## Usage
 
-- **Click the chevron** in the menu bar to show or hide the Hidden section. Hidden items slide back into view; click again (or wait for auto-rehide) to tuck them away.
-- **Option-click the chevron** to also reveal the Always Hidden section.
-- **Right-click the chevron** for a menu with **Settings…** and **Quit Valet**.
+- **Click the Valet button** in the menu bar to show or hide the Hidden section. Hidden items slide back into view; click again (or wait for auto-rehide) to tuck them away.
+- **Option-click the Valet button** to also reveal the Always Hidden section.
+- **Right-click the Valet button** for a menu with **Settings…** and **Quit Valet**.
 - **Assign items to sections** either way:
-  - **Cmd-drag** icons in the menu bar itself. Valet places two `|` separators: icons **between** them are Hidden, icons **left of the leftmost** one are Always Hidden, and icons to the right of both (next to the chevron) are Shown. Reveal everything first (Option-click the chevron) so both separators are on screen, then drag.
+  - **Cmd-drag** icons in the menu bar itself. Valet places two `|` separators: icons **between** them are Hidden, icons **left of the leftmost** one are Always Hidden, and icons to the right of both (next to the Valet button) are Shown. Reveal everything first (Option-click the Valet button) so both separators are on screen, then drag.
   - Or open **Settings → Items** and drag rows between the Shown / Hidden / Always Hidden lists (right-click a row for a "move to" menu). With Accessibility granted, Valet performs the Cmd-drag for you.
 - **Settings → Behavior** for auto-rehide and its delay, plus launch at login. **Settings → Hotkeys** to record a global toggle hotkey.
 
