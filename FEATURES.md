@@ -11,7 +11,7 @@ Status legend: `[ ]` planned · `[~]` in progress · `[x]` done (tests + manual 
 - [ ] Global hotkey toggle
 - [x] Auto-rehide after configurable delay
 - [x] Item introspection (CGWindowList enumeration)
-- [ ] Item image capture (ScreenCaptureKit, in-memory only)
+- [~] Item image capture (ScreenCaptureKit, in-memory only)
 - [ ] Settings UI: item list with images, drag-to-assign sections
 - [ ] Settings UI: behavior / hotkeys / permissions / about tabs
 - [ ] Move items between sections via simulated Cmd-drag
