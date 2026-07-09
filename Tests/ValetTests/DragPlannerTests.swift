@@ -37,6 +37,18 @@ import Testing
         #expect(plan!.to.x < 300)          // left of always-hidden separator
     }
 
+    @Test func clampsHiddenTargetWhenSeparatorsAreAdjacent() {
+        // Empty hidden section: separators nearly touching.
+        let adjacent = SeparatorFrames(
+            hidden: CGRect(x: 500, y: 0, width: 8, height: 24),
+            alwaysHidden: CGRect(x: 490, y: 0, width: 8, height: 24)
+        )
+        let plan = dragPlan(item: item(x: 600), target: .hidden, separators: adjacent)
+        #expect(plan != nil)
+        #expect(plan!.to.x > 498)   // right of always-hidden separator's maxX
+        #expect(plan!.to.x < 500)   // still left of hidden separator's minX
+    }
+
     @Test func returnsNilWhenAlreadyInTargetSection() {
         #expect(dragPlan(item: item(x: 600), target: .shown, separators: seps) == nil)
         #expect(dragPlan(item: item(x: 400), target: .hidden, separators: seps) == nil)

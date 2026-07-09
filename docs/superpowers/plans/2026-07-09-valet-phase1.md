@@ -1203,7 +1203,10 @@ func dragPlan(item: MenuBarItemInfo, target: BarSection, separators: SeparatorFr
     case .hidden:
         alreadyThere = item.frame.maxX <= separators.hidden.minX
             && item.frame.minX >= separators.alwaysHidden.maxX
-        targetX = separators.hidden.minX - gap - halfWidth
+        targetX = max(
+            separators.hidden.minX - gap - halfWidth,
+            (separators.alwaysHidden.maxX + separators.hidden.minX) / 2
+        )
     case .alwaysHidden:
         alreadyThere = item.frame.maxX <= separators.alwaysHidden.minX
         targetX = separators.alwaysHidden.minX - gap - halfWidth

@@ -140,6 +140,6 @@ final class MenuBarManager {
 
     private func windowID(of item: NSStatusItem?) -> UInt32? {
         guard let window = item?.button?.window else { return nil }
-        return UInt32(window.windowNumber)
+        return UInt32(exactly: window.windowNumber)
     }
 }

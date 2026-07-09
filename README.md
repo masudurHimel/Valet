@@ -51,7 +51,7 @@ open build/Valet.app
 - **Option-click the chevron** to also reveal the Always Hidden section.
 - **Right-click the chevron** for a menu with **Settings…** and **Quit Valet**.
 - **Assign items to sections** either way:
-  - **Cmd-drag** icons in the menu bar itself. Valet places two `|` separators: icons **between** them are Hidden, icons **left of the leftmost** one are Always Hidden, and icons to the right of both (next to the chevron) are Shown. Reveal first (click the chevron) so the separators are on screen, then drag.
+  - **Cmd-drag** icons in the menu bar itself. Valet places two `|` separators: icons **between** them are Hidden, icons **left of the leftmost** one are Always Hidden, and icons to the right of both (next to the chevron) are Shown. Reveal everything first (Option-click the chevron) so both separators are on screen, then drag.
   - Or open **Settings → Items** and drag rows between the Shown / Hidden / Always Hidden lists (right-click a row for a "move to" menu). With Accessibility granted, Valet performs the Cmd-drag for you.
 - **Settings → Behavior** for auto-rehide and its delay, plus launch at login. **Settings → Hotkeys** to record a global toggle hotkey.
 
