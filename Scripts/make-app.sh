@@ -6,6 +6,9 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
+# Single source of truth for the app version.
+VERSION="$(tr -d '[:space:]' < VERSION)"
+
 UNIVERSAL=0
 INSTALL=0
 for arg in "$@"; do
@@ -30,8 +33,12 @@ mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$BIN" "$APP/Contents/MacOS/Valet"
 cp Resources/Info.plist "$APP/Contents/Info.plist"
 cp Resources/Valet.icns "$APP/Contents/Resources/Valet.icns"
+# Stamp the version from VERSION into the bundle (before signing so the
+# signature covers it). CFBundleVersion uses the CI run number when available.
+/usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $VERSION" "$APP/Contents/Info.plist"
+/usr/libexec/PlistBuddy -c "Set :CFBundleVersion ${GITHUB_RUN_NUMBER:-1}" "$APP/Contents/Info.plist"
 codesign --force -s - "$APP"
-echo "Built $APP"
+echo "Built $APP ($VERSION)"
 
 if [[ "$INSTALL" == 1 ]]; then
     pkill -x Valet 2>/dev/null || true

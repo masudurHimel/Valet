@@ -30,7 +30,13 @@ struct SemVer: Comparable, Equatable {
 /// "Check for Updates" in the About tab. One GET to the GitHub Releases API.
 final class UpdateChecker {
     static let repoSlug = "masudurHimel/Valet"
-    static let currentVersion = "0.1.0"
+    /// Read from the built bundle (injected from the VERSION file at build time
+    /// by Scripts/make-app.sh) so there is a single source of truth. Falls back
+    /// to "0.0.0" outside a bundle (e.g. `swift run`, unit tests); that fallback
+    /// can only ever over-report an available update, never suppress a real one.
+    static var currentVersion: String {
+        (Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String) ?? "0.0.0"
+    }
 
     enum Status: Equatable {
         case upToDate
