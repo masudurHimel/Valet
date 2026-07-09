@@ -25,6 +25,15 @@ private func rawWindow(
         #expect(infos[0].frame == CGRect(x: 100, y: 0, width: 30, height: 24))
     }
 
+    @Test func keepsSpacerHiddenItemsAtNegativeX() {
+        // Hidden items are pushed far off-screen to the left by the expanding
+        // spacer; their windows stay enumerable with negative X. The filter
+        // must keep them or the Settings item list loses every hidden item.
+        let infos = menuBarItemInfos(from: [rawWindow(x: -8977)], excludingPIDs: [])
+        #expect(infos.count == 1)
+        #expect(infos[0].frame.minX == -8977)
+    }
+
     @Test func rejectsWrongLayer() {
         let infos = menuBarItemInfos(from: [rawWindow(layer: 0)], excludingPIDs: [])
         #expect(infos.isEmpty)

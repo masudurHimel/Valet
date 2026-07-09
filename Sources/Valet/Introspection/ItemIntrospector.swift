@@ -6,8 +6,12 @@ final class ItemIntrospector: ObservableObject {
     private var timer: Timer?
 
     func refresh() {
+        // Deliberately NOT .optionOnScreenOnly: menu bar item windows leave
+        // the on-screen set whenever the menu bar isn't displayed (full-screen
+        // apps, auto-hidden menu bar) and when Valet pushes them off-screen —
+        // with that option the items list emptied itself on the next refresh.
         guard let raw = CGWindowListCopyWindowInfo(
-            [.optionOnScreenOnly, .excludeDesktopElements], kCGNullWindowID
+            [.excludeDesktopElements], kCGNullWindowID
         ) as? [[String: Any]] else { return }
         let ownPID = pid_t(ProcessInfo.processInfo.processIdentifier)
         let infos = menuBarItemInfos(from: raw, excludingPIDs: [ownPID]).map { info in
@@ -35,7 +39,7 @@ final class ItemIntrospector: ObservableObject {
 
     func frame(ofWindowID windowID: UInt32) -> CGRect? {
         guard let raw = CGWindowListCopyWindowInfo(
-            [.optionOnScreenOnly], kCGNullWindowID
+            [.excludeDesktopElements], kCGNullWindowID
         ) as? [[String: Any]] else { return nil }
         for dict in raw {
             guard let num = dict["kCGWindowNumber"] as? Int, UInt32(num) == windowID,

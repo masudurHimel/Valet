@@ -7,7 +7,7 @@ final class ItemImageCapturer {
     func capture(windowID: UInt32) async -> CGImage? {
         guard PermissionsService.hasScreenRecording() else { return nil }
         guard let content = try? await SCShareableContent.excludingDesktopWindows(
-                false, onScreenWindowsOnly: true
+                false, onScreenWindowsOnly: false  // hidden items are off-screen but still capturable
               ),
               let window = content.windows.first(where: { $0.windowID == windowID })
         else { return nil }
