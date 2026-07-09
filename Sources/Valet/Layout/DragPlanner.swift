@@ -10,6 +10,16 @@ struct DragPlan: Equatable {
     var to: CGPoint
 }
 
+/// The section an item is physically in right now, judged purely by
+/// geometry. Works in any reveal state: the separator frames are the
+/// enumerated window frames, so expanded spacers shift the boundaries
+/// along with the items they pushed off-screen.
+func actualSection(of item: MenuBarItemInfo, separators: SeparatorFrames) -> BarSection {
+    if item.frame.maxX <= separators.alwaysHidden.minX { return .alwaysHidden }
+    if item.frame.maxX <= separators.hidden.minX { return .hidden }
+    return .shown
+}
+
 func dragPlan(item: MenuBarItemInfo, target: BarSection, separators: SeparatorFrames) -> DragPlan? {
     let gap: CGFloat = 12
     let halfWidth = item.frame.width / 2

@@ -20,6 +20,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private(set) var hotkeyManager = HotkeyManager()
     private(set) var introspector: ItemIntrospector!
     private var settingsWindow: SettingsWindowController!
+    private var newItemGuard: NewItemGuard?
     private var hotkeyObservation: AnyCancellable?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -39,6 +40,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let assigner = SectionAssigner(
             store: settingsStore, introspector: introspector,
             mover: ItemMover(), menuBarManager: menuBarManager
+        )
+        newItemGuard = NewItemGuard(
+            store: settingsStore, introspector: introspector,
+            assigner: assigner, menuBarManager: menuBarManager
         )
         let store = settingsStore!
         let intro = introspector!

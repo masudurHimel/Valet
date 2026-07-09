@@ -20,6 +20,7 @@ Status legend: `[ ]` planned · `[~]` in progress · `[x]` done (tests + manual 
 - [x] Multi-display basics (control items on active display)
 - [x] Manual "Check for Updates" button (only network call in the app)
 - [x] Local-only settings storage (bundle IDs + prefs, no PII)
+- [~] New items spawning into the hidden zone are auto-rescued to Shown (needs Accessibility; manual verify pending)
 
 ## Phase 2 — Reveal & search
 

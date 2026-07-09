@@ -6,6 +6,7 @@ final class SettingsStore: ObservableObject {
         static let autoRehide = "autoRehide"
         static let rehideDelay = "rehideDelay"
         static let toggleHotkey = "toggleHotkey"
+        static let knownKeys = "knownKeys"
     }
 
     private let defaults: UserDefaults
@@ -22,6 +23,11 @@ final class SettingsStore: ObservableObject {
     @Published var toggleHotkey: Hotkey? {
         didSet { saveJSON(toggleHotkey, key: Keys.toggleHotkey) }
     }
+    /// Item keys Valet has already seen; used to tell freshly spawned items
+    /// (rescued to Shown) apart from items the user Cmd-dragged manually.
+    @Published var knownKeys: Set<String> {
+        didSet { saveJSON(knownKeys, key: Keys.knownKeys) }
+    }
 
     init(defaults: UserDefaults) {
         self.defaults = defaults
@@ -29,6 +35,7 @@ final class SettingsStore: ObservableObject {
         self.autoRehide = defaults.object(forKey: Keys.autoRehide) as? Bool ?? true
         self.rehideDelay = defaults.object(forKey: Keys.rehideDelay) as? TimeInterval ?? 15
         self.toggleHotkey = Self.loadJSON(Hotkey.self, key: Keys.toggleHotkey, defaults: defaults)
+        self.knownKeys = Self.loadJSON(Set<String>.self, key: Keys.knownKeys, defaults: defaults) ?? []
     }
 
     private func saveJSON<T: Encodable>(_ value: T?, key: String) {
