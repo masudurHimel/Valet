@@ -42,8 +42,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             mover: ItemMover(), menuBarManager: menuBarManager
         )
         newItemGuard = NewItemGuard(
-            store: settingsStore, introspector: introspector,
-            assigner: assigner, menuBarManager: menuBarManager
+            store: settingsStore, introspector: introspector, assigner: assigner
         )
         let store = settingsStore!
         let intro = introspector!

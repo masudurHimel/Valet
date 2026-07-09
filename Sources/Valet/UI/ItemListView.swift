@@ -43,8 +43,19 @@ struct ItemListView: View {
     }
 
     private func sectionColumn(_ section: BarSection) -> some View {
-        let rows = reconcile(assignments: store.assignments, items: introspector.items)
-            .filter { $0.section == section }
+        // Group by where each icon PHYSICALLY is, so the list stays truthful
+        // for users who Cmd-drag icons manually instead of granting
+        // Accessibility. Saved assignments are only the fallback when the
+        // separator frames can't be read.
+        let rows: [(item: MenuBarItemInfo, section: BarSection)]
+        if let separators = assigner.currentSeparatorFrames() {
+            rows = introspector.items
+                .map { ($0, actualSection(of: $0, separators: separators)) }
+                .filter { $0.1 == section }
+        } else {
+            rows = reconcile(assignments: store.assignments, items: introspector.items)
+                .filter { $0.section == section }
+        }
         return VStack(alignment: .leading, spacing: 4) {
             Text(section.displayName).font(.headline)
             List(rows, id: \.item.key) { row in

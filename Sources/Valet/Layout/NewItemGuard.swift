@@ -22,17 +22,12 @@ func newItemDecision(isKnown: Bool, assignment: BarSection?, actual: BarSection)
 @MainActor
 final class NewItemGuard {
     private let store: SettingsStore
-    private let introspector: ItemIntrospector
     private let assigner: SectionAssigner
-    private let menuBarManager: MenuBarManager
     private var cancellable: AnyCancellable?
 
-    init(store: SettingsStore, introspector: ItemIntrospector,
-         assigner: SectionAssigner, menuBarManager: MenuBarManager) {
+    init(store: SettingsStore, introspector: ItemIntrospector, assigner: SectionAssigner) {
         self.store = store
-        self.introspector = introspector
         self.assigner = assigner
-        self.menuBarManager = menuBarManager
         cancellable = introspector.$items.sink { [weak self] items in
             self?.process(items)
         }
@@ -40,12 +35,7 @@ final class NewItemGuard {
 
     private func process(_ items: [MenuBarItemInfo]) {
         guard !assigner.isMoving else { return }
-        let ids = menuBarManager.separatorWindowIDs
-        guard let hiddenID = ids.hidden, let alwaysID = ids.alwaysHidden,
-              let hiddenFrame = introspector.frame(ofWindowID: hiddenID),
-              let alwaysFrame = introspector.frame(ofWindowID: alwaysID)
-        else { return }
-        let separators = SeparatorFrames(hidden: hiddenFrame, alwaysHidden: alwaysFrame)
+        guard let separators = assigner.currentSeparatorFrames() else { return }
 
         for item in items {
             let key = item.key
