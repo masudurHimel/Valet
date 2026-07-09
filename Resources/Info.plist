@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleExecutable</key>
 	<string>Valet</string>
+	<key>CFBundleIconFile</key>
+	<string>Valet</string>
 	<key>CFBundleIdentifier</key>
 	<string>app.valet.Valet</string>
 	<key>CFBundleName</key>

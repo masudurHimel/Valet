@@ -29,6 +29,7 @@ rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$BIN" "$APP/Contents/MacOS/Valet"
 cp Resources/Info.plist "$APP/Contents/Info.plist"
+cp Resources/Valet.icns "$APP/Contents/Resources/Valet.icns"
 codesign --force -s - "$APP"
 echo "Built $APP"
 

@@ -1,3 +1,4 @@
+import AppKit
 import SwiftUI
 
 struct AboutView: View {
@@ -7,8 +8,12 @@ struct AboutView: View {
 
     var body: some View {
         VStack(spacing: 10) {
-            Image(systemName: "menubar.arrow.up.rectangle")
-                .font(.system(size: 40))
+            // NSApp.applicationIconImage resolves CFBundleIconFile when run
+            // from the bundle, and a generic icon under `swift run`.
+            Image(nsImage: NSApp.applicationIconImage)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 64, height: 64)
             Text("Valet").font(.title.bold())
             Text("Version \(UpdateChecker.currentVersion)")
                 .foregroundStyle(.secondary)
