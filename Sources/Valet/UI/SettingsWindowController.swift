@@ -7,22 +7,33 @@ enum SettingsTab: String, CaseIterable {
 
 @MainActor
 final class SettingsWindowController {
+    private final class TabSelection: ObservableObject {
+        @Published var tab: SettingsTab = .items
+    }
+
+    private struct RootHost: View {
+        @ObservedObject var selection: TabSelection
+        let content: (Binding<SettingsTab>) -> AnyView
+
+        var body: some View {
+            content($selection.tab)
+        }
+    }
+
     private var window: NSWindow?
     private let makeRoot: (Binding<SettingsTab>) -> AnyView
-    private var selectedTab = SettingsTab.items
+    private let selection = TabSelection()
 
     init(makeRoot: @escaping (Binding<SettingsTab>) -> AnyView) {
         self.makeRoot = makeRoot
     }
 
     func show(tab: SettingsTab = .items) {
-        selectedTab = tab
+        selection.tab = tab
         if window == nil {
-            let binding = Binding<SettingsTab>(
-                get: { [weak self] in self?.selectedTab ?? .items },
-                set: { [weak self] in self?.selectedTab = $0 }
+            let hosting = NSHostingController(
+                rootView: RootHost(selection: selection, content: makeRoot)
             )
-            let hosting = NSHostingController(rootView: makeRoot(binding))
             let w = NSWindow(contentViewController: hosting)
             w.title = "Valet"
             w.styleMask = [.titled, .closable, .miniaturizable]

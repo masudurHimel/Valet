@@ -5,6 +5,7 @@ struct BehaviorView: View {
     @ObservedObject var store: SettingsStore
     @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
     @State private var loginItemError: String?
+    @State private var suppressLoginItemChange = false
 
     var body: some View {
         Form {
@@ -19,6 +20,10 @@ struct BehaviorView: View {
 
             Toggle("Launch Valet at login", isOn: $launchAtLogin)
                 .onChange(of: launchAtLogin) { _, enable in
+                    if suppressLoginItemChange {
+                        suppressLoginItemChange = false
+                        return
+                    }
                     do {
                         if enable {
                             try SMAppService.mainApp.register()
@@ -29,7 +34,11 @@ struct BehaviorView: View {
                     } catch {
                         loginItemError = "Couldn't update login item: \(error.localizedDescription). "
                             + "Run Valet from /Applications (built via Scripts/make-app.sh) and try again."
-                        launchAtLogin = SMAppService.mainApp.status == .enabled
+                        let actual = SMAppService.mainApp.status == .enabled
+                        if actual != launchAtLogin {
+                            suppressLoginItemChange = true
+                            launchAtLogin = actual
+                        }
                     }
                 }
             if let loginItemError {
