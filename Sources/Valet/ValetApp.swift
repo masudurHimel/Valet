@@ -36,10 +36,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         introspector = ItemIntrospector()
         introspector.startAutoRefresh(interval: 5)
+        let assigner = SectionAssigner(
+            store: settingsStore, introspector: introspector,
+            mover: ItemMover(), menuBarManager: menuBarManager
+        )
         let store = settingsStore!
         let intro = introspector!
         settingsWindow = SettingsWindowController { binding in
-            AnyView(SettingsRootView(store: store, introspector: intro, selectedTab: binding))
+            AnyView(SettingsRootView(store: store, introspector: intro,
+                                     assigner: assigner, selectedTab: binding))
         }
         menuBarManager.onOpenSettings = { [weak self] in
             self?.settingsWindow.show(tab: .items)

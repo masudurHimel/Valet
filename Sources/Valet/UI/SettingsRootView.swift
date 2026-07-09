@@ -3,11 +3,12 @@ import SwiftUI
 struct SettingsRootView: View {
     @ObservedObject var store: SettingsStore
     @ObservedObject var introspector: ItemIntrospector
+    @ObservedObject var assigner: SectionAssigner
     @Binding var selectedTab: SettingsTab
 
     var body: some View {
         TabView(selection: $selectedTab) {
-            Text("Items")
+            ItemListView(store: store, introspector: introspector, assigner: assigner)
                 .tabItem { Label("Items", systemImage: "menubar.rectangle") }
                 .tag(SettingsTab.items)
             BehaviorView(store: store)

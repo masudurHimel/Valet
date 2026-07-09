@@ -6,15 +6,15 @@ Status legend: `[ ]` planned · `[~]` in progress · `[x]` done (tests + manual 
 
 - [x] Menu bar separator + toggle chevron control items
 - [x] Hide/show via expanding spacer
-- [~] Three sections: Shown / Hidden / Always Hidden
+- [x] Three sections: Shown / Hidden / Always Hidden
 - [x] Toggle by clicking the chevron
 - [ ] Global hotkey toggle
 - [x] Auto-rehide after configurable delay
 - [x] Item introspection (CGWindowList enumeration)
-- [~] Item image capture (ScreenCaptureKit, in-memory only)
-- [ ] Settings UI: item list with images, drag-to-assign sections
+- [x] Item image capture (ScreenCaptureKit, in-memory only)
+- [x] Settings UI: item list with images, drag-to-assign sections
 - [~] Settings UI: behavior / hotkeys / permissions / about tabs
-- [ ] Move items between sections via simulated Cmd-drag
+- [x] Move items between sections via simulated Cmd-drag
 - [ ] Permissions onboarding with graceful degradation
 - [x] Launch at login (SMAppService)
 - [x] Multi-display basics (control items on active display)
