@@ -4,12 +4,12 @@ Status legend: `[ ]` planned · `[~]` in progress · `[x]` done (tests + manual 
 
 ## Phase 1 — Core (V1)
 
-- [ ] Menu bar separator + toggle chevron control items
-- [ ] Hide/show via expanding spacer
-- [ ] Three sections: Shown / Hidden / Always Hidden
-- [ ] Toggle by clicking the chevron
+- [x] Menu bar separator + toggle chevron control items
+- [x] Hide/show via expanding spacer
+- [~] Three sections: Shown / Hidden / Always Hidden
+- [x] Toggle by clicking the chevron
 - [ ] Global hotkey toggle
-- [ ] Auto-rehide after configurable delay
+- [x] Auto-rehide after configurable delay
 - [ ] Item introspection (CGWindowList enumeration)
 - [ ] Item image capture (ScreenCaptureKit, in-memory only)
 - [ ] Settings UI: item list with images, drag-to-assign sections
@@ -17,7 +17,7 @@ Status legend: `[ ]` planned · `[~]` in progress · `[x]` done (tests + manual 
 - [ ] Move items between sections via simulated Cmd-drag
 - [ ] Permissions onboarding with graceful degradation
 - [ ] Launch at login (SMAppService)
-- [ ] Multi-display basics (control items on active display)
+- [x] Multi-display basics (control items on active display)
 - [ ] Manual "Check for Updates" button (only network call in the app)
 - [ ] Local-only settings storage (bundle IDs + prefs, no PII)
 

@@ -13,14 +13,11 @@ enum ValetMain {
 }
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
-    private var statusItem: NSStatusItem?
+    private(set) var settingsStore: SettingsStore!
+    private(set) var menuBarManager: MenuBarManager!
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-        item.button?.image = NSImage(
-            systemSymbolName: "chevron.left",
-            accessibilityDescription: "Valet"
-        )
-        statusItem = item
+        settingsStore = SettingsStore(defaults: .standard)
+        menuBarManager = MenuBarManager(store: settingsStore)
     }
 }
