@@ -63,8 +63,10 @@ Valet asks for two optional permissions. **It works without both** — you just 
 
 | Permission | What it enables | Without it |
 | --- | --- | --- |
-| **Screen Recording** | Shows the real icons of your menu bar items in the Settings item list (images kept in memory only). | The item list still works, showing generic icons and app names. |
+| **Screen Recording** | Shows each item's exact menu bar glyph in the Settings item list (still images, kept in memory only). | The item list still works, showing each owning app's icon and name instead. |
 | **Accessibility** | Lets Valet move icons between sections for you by simulating the Cmd-drag. | Section assignments still save; you Cmd-drag the icons yourself in the menu bar. |
+
+> Why does the Screen Recording prompt mention audio? Recent macOS versions label this single permission "Screen & System Audio Recording" — that wording is Apple's and can't be changed by the app. Valet contains no audio code and records no video: it takes still snapshots of individual menu bar items only, and the entire capture path is one small file you can audit, `Sources/Valet/Introspection/ItemImageCapturer.swift`.
 
 You can grant, decline, or revoke either at any time in **System Settings → Privacy & Security**; the Settings → Permissions tab shows live status with request buttons and shortcuts to the right System Settings pane.
 

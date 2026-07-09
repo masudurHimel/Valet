@@ -1,3 +1,4 @@
+import AppKit
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -12,7 +13,7 @@ struct ItemListView: View {
         VStack(alignment: .leading, spacing: 8) {
             if !PermissionsService.hasScreenRecording() {
                 Label(
-                    "Grant Screen Recording in the Permissions tab to see item icons. Everything stays on this Mac.",
+                    "Showing app icons. Grant Screen Recording in the Permissions tab to see each item's exact menu bar glyph — images stay on this Mac.",
                     systemImage: "eye.slash"
                 )
                 .font(.caption)
@@ -68,6 +69,13 @@ struct ItemListView: View {
         HStack(spacing: 6) {
             if let cg = images[item.key] {
                 Image(cg, scale: 2, label: Text(item.ownerName))
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 18)
+            } else if let appIcon = NSRunningApplication(processIdentifier: item.ownerPID)?.icon {
+                // No Screen Recording permission (or capture unavailable):
+                // fall back to the owning app's icon — needs no permission.
+                Image(nsImage: appIcon)
                     .resizable()
                     .scaledToFit()
                     .frame(height: 18)

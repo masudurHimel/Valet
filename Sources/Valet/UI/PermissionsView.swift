@@ -10,8 +10,8 @@ struct PermissionsView: View {
             permissionRow(
                 granted: screenRecording,
                 title: "Screen Recording",
-                purpose: "Lets Valet show the icons and names of your menu bar items.",
-                privacy: "Captures only menu bar item images, kept in memory, never saved or sent anywhere.",
+                purpose: "Lets Valet show each item's exact menu bar glyph in the Items tab. Without it, Valet shows the owning app's icon instead.",
+                privacy: "macOS labels this \"Screen & System Audio Recording\", but Valet contains no audio code — it takes still snapshots of menu bar items only, kept in memory, never saved or sent anywhere.",
                 request: PermissionsService.requestScreenRecording,
                 openSettings: PermissionsService.openScreenRecordingSettings
             )
