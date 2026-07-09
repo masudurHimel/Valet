@@ -86,6 +86,7 @@ struct ItemListView: View {
         }
     }
 
+    @MainActor
     private func refreshImages() async {
         for item in introspector.items {
             if let image = await capturer.capture(windowID: item.windowID) {
