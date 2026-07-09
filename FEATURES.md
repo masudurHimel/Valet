@@ -10,7 +10,7 @@ Status legend: `[ ]` planned · `[~]` in progress · `[x]` done (tests + manual 
 - [x] Toggle by clicking the chevron
 - [ ] Global hotkey toggle
 - [x] Auto-rehide after configurable delay
-- [ ] Item introspection (CGWindowList enumeration)
+- [x] Item introspection (CGWindowList enumeration)
 - [ ] Item image capture (ScreenCaptureKit, in-memory only)
 - [ ] Settings UI: item list with images, drag-to-assign sections
 - [ ] Settings UI: behavior / hotkeys / permissions / about tabs
