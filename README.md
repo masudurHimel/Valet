@@ -9,7 +9,7 @@ Valet is a free, open-source (MIT) **menu bar manager for macOS 14+** — a **Ba
 - **Option-click** the Valet button to also reveal the Always Hidden section
 - **Global hotkey** to toggle from anywhere (recordable in Settings → Hotkeys)
 - **Auto-rehide** after a configurable delay (default 15 seconds, adjustable or off)
-- **Settings window** with a live list of your menu bar items — drag rows between sections and Valet moves the real icons for you
+- **Settings window** with a live list of your menu bar items — drag rows between sections; Valet saves the choice and, with Accessibility granted, moves the real icons for you
 - **Launch at login** (via Apple's `SMAppService`, toggleable in Settings → Behavior)
 - **Multi-display aware** — Valet's control items appear on each display's menu bar
 - **Manual-only update check** — the single network request in the entire app, and it never fires unless you click the button
@@ -22,7 +22,7 @@ If you're looking for a Bartender alternative, here's the honest picture. Valet 
 | --- | --- | --- |
 | Hide/show menu bar items, Shown + Hidden + Always Hidden sections | ✅ | ✅ |
 | Global hotkey, auto-rehide, click to toggle | ✅ | ✅ |
-| Item list with real icons, drag between sections | ✅ | ✅ |
+| Menu bar item list, drag between sections | ✅ | ✅ |
 | Auto-handling of newly appearing items | ✅ | ✅ |
 | Show items on hover/swipe, menu bar item search | ✅ | 🔜 roadmap |
 | Triggers (battery, Wi-Fi, app-based) | ✅ | 🔜 roadmap |
@@ -70,30 +70,29 @@ open build/Valet.app
 
 `Scripts/make-app.sh` builds a release binary with Swift Package Manager, assembles `build/Valet.app`, and ad-hoc signs it. Pass `--universal` for an arm64 + x86_64 binary, and `--install` to copy the result to `/Applications` and launch it (quitting any running copy first). Run the tests with `swift test`.
 
-> Heads-up when rebuilding: each build re-signs the app with a new ad-hoc signature, which makes macOS forget its Screen Recording/Accessibility grants — re-grant them in System Settings after installing an update you built yourself.
+> Heads-up when rebuilding: each build re-signs the app with a new ad-hoc signature, which makes macOS forget any Screen Recording/Accessibility grants you made — re-grant them in System Settings after installing an update you built yourself.
 
 ## Usage
 
 - **Click the Valet button** in the menu bar to show or hide the Hidden section. Hidden items slide back into view; click again (or wait for auto-rehide) to tuck them away.
 - **Option-click the Valet button** to also reveal the Always Hidden section.
-- **Right-click the Valet button** for a menu with **Settings…** and **Quit Valet**.
+- **Right-click the Valet button** for a menu with **Show All Items** (reveals the Always Hidden section too), **Settings…**, and **Quit Valet**.
 - **Assign items to sections** either way:
   - **Cmd-drag** icons in the menu bar itself. Valet places two `|` separators: icons **between** them are Hidden, icons **left of the leftmost** one are Always Hidden, and icons to the right of both (next to the Valet button) are Shown. Reveal everything first (Option-click the Valet button) so both separators are on screen, then drag.
-  - Or open **Settings → Items** and drag rows between the Shown / Hidden / Always Hidden lists (right-click a row for a "move to" menu). With Accessibility granted, Valet performs the Cmd-drag for you.
+  - Or open **Settings → Items** and drag rows between the Shown / Hidden / Always Hidden lists (right-click a row for a "move to" menu). Valet saves the choice and asks you to Cmd-drag the icon across the `|` separators yourself; with Accessibility granted, Valet performs the Cmd-drag for you.
+- **Safe launches:** your hidden arrangement persists across relaunches, and Valet verifies it before collapsing — if an icon appeared while Valet was closed and would start the session invisible, the separators reset to the far left instead and everything stays visible. Relaunching Valet never makes an item disappear.
 - **Settings → Behavior** for auto-rehide and its delay, plus launch at login. **Settings → Hotkeys** to record a global toggle hotkey.
 
 ## Permissions
 
-Valet asks for two optional permissions. **It works without both** — you just lose some convenience, and nothing ever leaves your Mac either way.
+**Valet never asks for any permission.** There are no prompts, and everything above works out of the box: the item list shows each owning app's icon and name, and moving an item saves your choice and asks you to Cmd-drag the icon yourself. Two optional grants add convenience for power users — make them yourself in **System Settings → Privacy & Security**, and revoke them at any time:
 
-| Permission | What it enables | Without it |
-| --- | --- | --- |
-| **Screen Recording** | Shows each item's exact menu bar glyph in the Settings item list (still images, kept in memory only). | The item list still works, showing each owning app's icon and name instead. |
-| **Accessibility** | Lets Valet move icons between sections for you by simulating the Cmd-drag. | Section assignments still save; you Cmd-drag the icons yourself in the menu bar. |
+| Optional grant | What it adds |
+| --- | --- |
+| **Accessibility** | Valet moves icons between sections for you by simulating the Cmd-drag. |
+| **Screen Recording** | The Settings item list shows each item's exact menu bar glyph (still images, kept in memory only). |
 
-> Why does the Screen Recording prompt mention audio? Recent macOS versions label this single permission "Screen & System Audio Recording" — that wording is Apple's and can't be changed by the app. Valet contains no audio code and records no video: it takes still snapshots of individual menu bar items only, and the entire capture path is one small file you can audit, `Sources/Valet/Introspection/ItemImageCapturer.swift`.
-
-You can grant, decline, or revoke either at any time in **System Settings → Privacy & Security**; the Settings → Permissions tab shows live status with request buttons and shortcuts to the right System Settings pane.
+> Why does macOS call this one "Screen & System Audio Recording"? That wording is Apple's and can't be changed by the app. Valet contains no audio code and records no video: it takes still snapshots of individual menu bar items only, and the entire capture path is one small file you can audit, `Sources/Valet/Introspection/ItemImageCapturer.swift`.
 
 ## License
 

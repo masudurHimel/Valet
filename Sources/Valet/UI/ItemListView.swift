@@ -11,16 +11,6 @@ struct ItemListView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            if !PermissionsService.hasScreenRecording() {
-                Label(
-                    "Showing app icons. Grant Screen Recording in the Permissions tab to see each item's exact menu bar glyph — images stay on this Mac.",
-                    systemImage: "eye.slash"
-                )
-                .font(.caption)
-                .padding(8)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(.yellow.opacity(0.15), in: RoundedRectangle(cornerRadius: 6))
-            }
             if let error = assigner.lastError {
                 Text(error)
                     .font(.caption)

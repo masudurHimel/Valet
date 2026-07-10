@@ -36,9 +36,9 @@ final class SectionAssigner: ObservableObject {
         guard !isMoving else { return }
         guard PermissionsService.hasAccessibility() else {
             store.assignments[key] = section
-            lastError = "Accessibility permission is off, so Valet saved your choice but can't "
-                + "move the icon for you. Grant it in Permissions, or hold Cmd and drag the icon "
-                + "relative to the | separators yourself."
+            lastError = "Valet saved your choice, but can't move icons itself without Accessibility "
+                + "(System Settings > Privacy & Security). You can also hold Cmd and drag the icon "
+                + "across the | separators yourself."
             return
         }
         isMoving = true

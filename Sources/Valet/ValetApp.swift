@@ -41,9 +41,30 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             store: settingsStore, introspector: introspector,
             mover: ItemMover(), menuBarManager: menuBarManager
         )
-        newItemGuard = NewItemGuard(
-            store: settingsStore, introspector: introspector, assigner: assigner
-        )
+        // Launch check: the bar starts revealed; give the restored status
+        // items a moment to settle, verify that nothing sits in a hidden
+        // zone without the user's recorded choice, then collapse (resetting
+        // the separators to the far left if something would be swallowed).
+        // NewItemGuard is created after, so its first snapshot is clean.
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            var plan = LaunchPlan.resetPositions  // unverifiable zones → don't hide
+            for _ in 0..<5 {  // separator windows can take a moment to exist
+                try? await Task.sleep(for: .milliseconds(300))
+                self.introspector.refresh()
+                guard let separators = assigner.currentSeparatorFrames() else { continue }
+                plan = launchPlan(
+                    items: packedStrip(items: self.introspector.items, separators: separators),
+                    separators: separators,
+                    assignments: self.settingsStore.assignments
+                )
+                break
+            }
+            self.menuBarManager.completeLaunchReconcile(plan)
+            self.newItemGuard = NewItemGuard(
+                store: self.settingsStore, introspector: self.introspector, assigner: assigner
+            )
+        }
         let store = settingsStore!
         let intro = introspector!
         settingsWindow = SettingsWindowController { binding in
@@ -57,8 +78,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let hasOnboarded = UserDefaults.standard.bool(forKey: "hasOnboarded")
         if !hasOnboarded {
             UserDefaults.standard.set(true, forKey: "hasOnboarded")
-            settingsWindow.show(tab: .permissions)
+            settingsWindow.show(tab: .items)
         }
+    }
+
+    func applicationWillTerminate(_ notification: Notification) {
+        menuBarManager.captureSeparatorPositionsForTermination()
     }
 
     private func applyHotkey(_ hotkey: Hotkey?) {

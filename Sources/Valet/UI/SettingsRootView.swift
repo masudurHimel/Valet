@@ -17,9 +17,6 @@ struct SettingsRootView: View {
             HotkeyRecorderView(store: store)
                 .tabItem { Label("Hotkeys", systemImage: "keyboard") }
                 .tag(SettingsTab.hotkeys)
-            PermissionsView()
-                .tabItem { Label("Permissions", systemImage: "lock.shield") }
-                .tag(SettingsTab.permissions)
             AboutView()
                 .tabItem { Label("About", systemImage: "info.circle") }
                 .tag(SettingsTab.about)

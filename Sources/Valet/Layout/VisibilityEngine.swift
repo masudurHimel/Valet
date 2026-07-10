@@ -45,3 +45,19 @@ struct VisibilityEngine: Equatable {
         return now.addingTimeInterval(delay)
     }
 }
+
+/// The "NSStatusItem Preferred Position" value to save for a separator whose
+/// button window has this frame, or nil to keep the last saved value. The
+/// fence is the separator's RIGHT edge (maxX), which stays meaningful at any
+/// length, so derive the 8 pt-wide position from it. Skips:
+/// - the pre-layout placeholder: at creation the window parks at the screen
+///   origin (observed [0..24]) before the status bar lays it out — capturing
+///   then would clobber both keys with garbage every launch. Inflated spacers
+///   are still captured: they're pushed left but thousands of points wide.
+/// - positions outside the screen (separator pushed off by a neighbor).
+func separatorCapturePosition(windowFrame: CGRect, screenFrame: CGRect) -> CGFloat? {
+    guard windowFrame.minX > 0 || windowFrame.width > 100 else { return nil }
+    let position = screenFrame.maxX - windowFrame.maxX + VisibilityEngine.separatorLength
+    guard position > 0, position < screenFrame.width else { return nil }
+    return position
+}

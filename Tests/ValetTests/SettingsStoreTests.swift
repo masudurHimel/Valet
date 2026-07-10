@@ -33,16 +33,6 @@ private func freshDefaults() -> UserDefaults {
         #expect(restored.toggleHotkey == Hotkey(keyCode: 11, carbonModifiers: 256))
     }
 
-    @Test func persistsKnownKeys() {
-        let defaults = freshDefaults()
-        let store = SettingsStore(defaults: defaults)
-        #expect(store.knownKeys.isEmpty)
-        store.knownKeys = ["com.a#0", "com.b#0"]
-
-        let restored = SettingsStore(defaults: defaults)
-        #expect(restored.knownKeys == ["com.a#0", "com.b#0"])
-    }
-
     @Test func sectionDisplayNames() {
         #expect(BarSection.shown.displayName == "Shown")
         #expect(BarSection.hidden.displayName == "Hidden")

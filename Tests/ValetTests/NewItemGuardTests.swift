@@ -36,22 +36,28 @@ import Testing
         #expect(actualSection(of: item(x: 600), separators: revealed) == .shown)
     }
 
-    @Test func newUnassignedItemInHiddenZoneIsRescued() {
-        #expect(newItemDecision(isKnown: false, assignment: nil, actual: .alwaysHidden) == .rescueToShown)
-        #expect(newItemDecision(isKnown: false, assignment: nil, actual: .hidden) == .rescueToShown)
+    @Test func firstSightingInHiddenZoneUnassignedIsRescued() {
+        // Covers both a freshly spawned item and one seen only in PAST sessions
+        // (e.g. it spawned while Valet was closed and the restored separator
+        // landed to its right): nothing persisted feeds this decision, so an
+        // app relaunch always starts from "not seen in Shown this session".
+        #expect(newItemDecision(seenInShownThisSession: false, assignment: nil, actual: .alwaysHidden)
+            == .rescueToShown)
+        #expect(newItemDecision(seenInShownThisSession: false, assignment: nil, actual: .hidden)
+            == .rescueToShown)
     }
 
-    @Test func knownUnassignedItemInHiddenZoneAdoptsManualDrag() {
-        #expect(newItemDecision(isKnown: true, assignment: nil, actual: .hidden)
+    @Test func seenInShownThenHiddenUnassignedAdoptsManualDrag() {
+        #expect(newItemDecision(seenInShownThisSession: true, assignment: nil, actual: .hidden)
             == .adoptAssignment(.hidden))
-        #expect(newItemDecision(isKnown: true, assignment: nil, actual: .alwaysHidden)
+        #expect(newItemDecision(seenInShownThisSession: true, assignment: nil, actual: .alwaysHidden)
             == .adoptAssignment(.alwaysHidden))
     }
 
     @Test func assignedOrShownItemsAreLeftAlone() {
-        #expect(newItemDecision(isKnown: false, assignment: .hidden, actual: .hidden) == .none)
-        #expect(newItemDecision(isKnown: true, assignment: .hidden, actual: .shown) == .none)
-        #expect(newItemDecision(isKnown: false, assignment: nil, actual: .shown) == .none)
-        #expect(newItemDecision(isKnown: true, assignment: nil, actual: .shown) == .none)
+        #expect(newItemDecision(seenInShownThisSession: false, assignment: .hidden, actual: .hidden) == .none)
+        #expect(newItemDecision(seenInShownThisSession: true, assignment: .hidden, actual: .shown) == .none)
+        #expect(newItemDecision(seenInShownThisSession: false, assignment: nil, actual: .shown) == .none)
+        #expect(newItemDecision(seenInShownThisSession: true, assignment: nil, actual: .shown) == .none)
     }
 }

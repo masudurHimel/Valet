@@ -2,7 +2,7 @@ import AppKit
 import SwiftUI
 
 enum SettingsTab: String, CaseIterable {
-    case items, behavior, hotkeys, permissions, about
+    case items, behavior, hotkeys, about
 }
 
 @MainActor
