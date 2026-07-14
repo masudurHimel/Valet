@@ -15,8 +15,7 @@ final class ItemIntrospector: ObservableObject {
         ) as? [[String: Any]] else { return }
         let ownPID = pid_t(ProcessInfo.processInfo.processIdentifier)
         let infos = menuBarItemInfos(from: raw, excludingPIDs: [ownPID]).map { info in
-            var copy = info
-            copy = MenuBarItemInfo(
+            MenuBarItemInfo(
                 windowID: info.windowID,
                 ownerPID: info.ownerPID,
                 ownerName: info.ownerName,
@@ -24,7 +23,6 @@ final class ItemIntrospector: ObservableObject {
                 frame: info.frame,
                 key: ""
             )
-            return copy
         }
         items = keyedItems(infos)
     }
@@ -43,11 +41,9 @@ final class ItemIntrospector: ObservableObject {
         ) as? [[String: Any]] else { return nil }
         for dict in raw {
             guard let num = dict["kCGWindowNumber"] as? Int, UInt32(num) == windowID,
-                  let bounds = dict["kCGWindowBounds"] as? [String: Any],
-                  let x = bounds["X"] as? Double, let y = bounds["Y"] as? Double,
-                  let w = bounds["Width"] as? Double, let h = bounds["Height"] as? Double
+                  let frame = windowBounds(from: dict)
             else { continue }
-            return CGRect(x: x, y: y, width: w, height: h)
+            return frame
         }
         return nil
     }

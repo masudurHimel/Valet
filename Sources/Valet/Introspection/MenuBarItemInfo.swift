@@ -1,6 +1,6 @@
 import Foundation
 
-struct MenuBarItemInfo: Equatable, Identifiable {
+struct MenuBarItemInfo: Equatable {
     let windowID: UInt32
     let ownerPID: pid_t
     let ownerName: String
@@ -8,6 +8,5 @@ struct MenuBarItemInfo: Equatable, Identifiable {
     let frame: CGRect
     var key: String
 
-    var id: String { key.isEmpty ? String(windowID) : key }
     var ownerIdentity: String { bundleID ?? ownerName }
 }

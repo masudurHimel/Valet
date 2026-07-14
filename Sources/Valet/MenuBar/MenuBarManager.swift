@@ -16,11 +16,18 @@ final class MenuBarManager {
     private var hiddenSeparator: NSStatusItem!
     private var alwaysHiddenSeparator: NSStatusItem!
 
+    /// Last preferred-position value seen while the layout was healthy, keyed by
+    /// autosave name. The order guard records these on healthy refreshes and
+    /// asks to restore them when a separator lands right of the chevron.
+    private var lastGoodPositions: [String: CGFloat] = [:]
+
     var onOpenSettings: (() -> Void)?
 
     var separatorWindowIDs: (hidden: UInt32?, alwaysHidden: UInt32?) {
         (windowID(of: hiddenSeparator), windowID(of: alwaysHiddenSeparator))
     }
+
+    var chevronWindowID: UInt32? { windowID(of: chevronItem) }
 
     init(store: SettingsStore) {
         self.store = store
@@ -44,16 +51,26 @@ final class MenuBarManager {
     func completeLaunchReconcile(_ plan: LaunchPlan) {
         persistenceLog.info("launch reconcile: \(String(describing: plan), privacy: .public)")
         if plan == .resetPositions {
-            NSStatusBar.system.removeStatusItem(hiddenSeparator)
-            NSStatusBar.system.removeStatusItem(alwaysHiddenSeparator)
-            for name in ["valet-hidden-separator", "valet-always-hidden-separator"] {
-                UserDefaults.standard.removeObject(forKey: "NSStatusItem Preferred Position \(name)")
-            }
-            hiddenSeparator = makeSeparator(autosaveName: "valet-hidden-separator")
-            alwaysHiddenSeparator = makeSeparator(autosaveName: "valet-always-hidden-separator")
+            resetSeparatorPositions()
         }
         engine.collapse()
         apply()
+    }
+
+    /// Remove both separators, clear their saved preferred positions, and
+    /// recreate them at the far-left anchor (newer status items appear further
+    /// left, so recreating hidden then alwaysHidden keeps alwaysHidden leftmost).
+    /// Used by the launch safety reset and by the separator-order guard's
+    /// no-Accessibility degrade path. Caller is responsible for the following
+    /// `apply()`/reveal-state restore.
+    func resetSeparatorPositions() {
+        NSStatusBar.system.removeStatusItem(hiddenSeparator)
+        NSStatusBar.system.removeStatusItem(alwaysHiddenSeparator)
+        for name in ["valet-hidden-separator", "valet-always-hidden-separator"] {
+            UserDefaults.standard.removeObject(forKey: "NSStatusItem Preferred Position \(name)")
+        }
+        hiddenSeparator = makeSeparator(autosaveName: "valet-hidden-separator")
+        alwaysHiddenSeparator = makeSeparator(autosaveName: "valet-always-hidden-separator")
     }
 
     func toggle() {
@@ -171,6 +188,50 @@ final class MenuBarManager {
         }
         persistenceLog.info("terminate capture: running (state \(self.engine.state.rawValue, privacy: .public))")
         captureSeparatorPositions()
+    }
+
+    /// Snapshot the current separator positions as the last known-good layout.
+    /// The order guard calls this on healthy refreshes. Uses the same maxX-fence
+    /// math as `captureSeparatorPositions`, so it is valid in any reveal state.
+    func recordGoodSeparatorPositions() {
+        for (item, name) in [
+            (hiddenSeparator, "valet-hidden-separator"),
+            (alwaysHiddenSeparator, "valet-always-hidden-separator"),
+        ] {
+            guard let window = item?.button?.window, let screen = window.screen,
+                  let position = separatorCapturePosition(windowFrame: window.frame, screenFrame: screen.frame)
+            else { continue }
+            lastGoodPositions[name] = position
+        }
+    }
+
+    /// Bounce the given separators back to their last known-good positions by
+    /// rewriting the preferred-position key and recreating the status item —
+    /// macOS reads the key when the item is (re)created, so it lands back where
+    /// it was. Permission-free (no simulated drag). A separator with no recorded
+    /// good position falls back to the far-left anchor. Re-applies the current
+    /// reveal state so the recreated separators get the right lengths.
+    func restoreSeparatorsToLastGood(_ roles: [SeparatorRole]) {
+        for role in roles {
+            let name = role == .hidden ? "valet-hidden-separator" : "valet-always-hidden-separator"
+            let key = "NSStatusItem Preferred Position \(name)"
+            if let position = lastGoodPositions[name] {
+                persistenceLog.notice("orderfix: RESTORE \(name, privacy: .public) -> \(position, privacy: .public)")
+                UserDefaults.standard.set(position, forKey: key)
+            } else {
+                persistenceLog.notice("orderfix: RESTORE \(name, privacy: .public) -> far-left (no recorded good)")
+                UserDefaults.standard.removeObject(forKey: key)
+            }
+            switch role {
+            case .hidden:
+                NSStatusBar.system.removeStatusItem(hiddenSeparator)
+                hiddenSeparator = makeSeparator(autosaveName: name)
+            case .alwaysHidden:
+                NSStatusBar.system.removeStatusItem(alwaysHiddenSeparator)
+                alwaysHiddenSeparator = makeSeparator(autosaveName: name)
+            }
+        }
+        apply()
     }
 
     private func capturePosition(of item: NSStatusItem, autosaveName: String) {
