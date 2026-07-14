@@ -21,6 +21,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private(set) var introspector: ItemIntrospector!
     private var settingsWindow: SettingsWindowController!
     private var newItemGuard: NewItemGuard?
+    private var separatorOrderGuard: SeparatorOrderGuard?
     private var hotkeyObservation: AnyCancellable?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -64,21 +65,22 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             self.newItemGuard = NewItemGuard(
                 store: self.settingsStore, introspector: self.introspector, assigner: assigner
             )
+            self.separatorOrderGuard = SeparatorOrderGuard(
+                introspector: self.introspector, assigner: assigner,
+                menuBarManager: self.menuBarManager
+            )
         }
-        let store = settingsStore!
-        let intro = introspector!
-        settingsWindow = SettingsWindowController { binding in
-            AnyView(SettingsRootView(store: store, introspector: intro,
-                                     assigner: assigner, selectedTab: binding))
+        settingsWindow = SettingsWindowController {
+            AnyView(SettingsRootView())
         }
         menuBarManager.onOpenSettings = { [weak self] in
-            self?.settingsWindow.show(tab: .items)
+            self?.settingsWindow.show()
         }
 
         let hasOnboarded = UserDefaults.standard.bool(forKey: "hasOnboarded")
         if !hasOnboarded {
             UserDefaults.standard.set(true, forKey: "hasOnboarded")
-            settingsWindow.show(tab: .items)
+            settingsWindow.show()
         }
     }
 

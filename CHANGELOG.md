@@ -7,6 +7,18 @@ All notable changes to Valet are documented here. The format follows
 Bump the version in this file and in `VERSION` together, in the same pull
 request, when you intend to ship. Merging that PR to `master` cuts the release.
 
+## [0.2.1] - 2026-07-11
+
+### Changed
+- Repository housekeeping: the app icon source (`valet-icon.png`) moved into `Resources/`, and internal design specs left the repository (local `specs/` directory, now gitignored).
+- Removed dead code: unused `Identifiable` conformance on `MenuBarItemInfo`, and the window-bounds parsing duplicated between `WindowFilter` and `ItemIntrospector` now shares one helper. No behavior change.
+
+## [0.2.0] - 2026-07-11
+
+### Added
+- Launch-time layout verification is now driven by a pure, unit-tested launch plan (`LaunchPlanner`): on start Valet snapshots the packed strip of menu bar items and either collapses in place — when every hidden-zone item matches its recorded assignment — or recreates the separators at the far left so the session starts with everything visible.
+- `VisibilityEngine` gained the launch-reconcile states backing the above.
+
 ## [0.1.1] - 2026-07-10
 
 ### Fixed

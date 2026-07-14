@@ -70,3 +70,12 @@ Notes before you start:
 30. **Fresh launch, busy menu bar:** with plenty of third-party menu bar apps running and no assignments saved, launch Valet fresh (`defaults delete app.valet.Valet`): every third-party item stays visible — nothing starts the session swallowed into a hidden zone.
 31. **Show All Items:** with items in the Always Hidden zone, right-click the Valet button → "Show All Items": the Always Hidden zone is revealed (same effect as Option-clicking the button).
 32. **Launch-swallow regression:** Cmd-drag an item to Hidden, quit Valet, launch a new menu bar app (macOS spawns its icon at the far left), then relaunch Valet: every item — including the new one — is visible, and the new app gets no hidden assignment. Relaunching Valet must never make an item disappear.
+
+## Separator order guard — chevron protection (Task: separator-order-guard)
+
+Requires a fresh build (`Scripts/make-app.sh --install`) so TCC grants are known.
+
+33. **Pre-empt while revealed (Accessibility granted):** reveal the bar, then Cmd-drag the `|` hidden separator to the RIGHT of the ⋯ chevron. Within ~5 seconds the bar self-corrects: the separator returns to the left of the chevron, the arrangement is preserved, and the chevron stays clickable throughout.
+34. **Self-recover from the stuck state:** Cmd-drag the hidden separator right of the chevron, then immediately collapse (click the chevron or wait for auto-rehide) so the chevron is pushed off-screen. Within ~5 seconds the guard reveals the bar, moves the separator back, and re-collapses — no user action needed, and the chevron is usable again.
+35. **Degrade without Accessibility:** revoke Accessibility for Valet in System Settings → Privacy & Security, then repeat step 33. The separators reset to the far left, a guidance message appears in Settings, and the app stays usable (the session starts all-Shown). No permission prompt is ever triggered.
+36. **No false positives:** with a healthy layout, confirm the bar does NOT flicker or reveal itself during normal use over a minute or two of idling.
