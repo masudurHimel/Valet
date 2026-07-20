@@ -7,6 +7,14 @@ All notable changes to Valet are documented here. The format follows
 Bump the version in this file and in `VERSION` together, in the same pull
 request, when you intend to ship. Merging that PR to `master` cuts the release.
 
+## [0.3.0] - 2026-07-20
+
+### Added
+- "Reset" in the Valet button's right-click menu: forgets every section assignment, clears the saved separator positions, and re-collapses — returning Valet to a clean all-Shown state without a quit/reinstall.
+
+### Fixed
+- A corrupted separator position no longer strands the layout every launch. macOS records "NSStatusItem Preferred Position" whenever you drag a status item, and a stray drag could persist a value that parked a separator off-screen — where it hides nothing, so the launch check read the layout as healthy and kept it on every relaunch. Valet now discards any restored position that falls outside the screen before creating its status items, so the separator starts from the clean far-left anchor instead.
+
 ## [0.2.1] - 2026-07-11
 
 ### Changed

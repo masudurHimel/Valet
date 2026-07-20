@@ -61,3 +61,15 @@ func separatorCapturePosition(windowFrame: CGRect, screenFrame: CGRect) -> CGFlo
     guard position > 0, position < screenFrame.width else { return nil }
     return position
 }
+
+/// Whether a "NSStatusItem Preferred Position" value restored at launch is
+/// usable. macOS records this key itself whenever the user drags a status item,
+/// and a stray drag can persist a value that parks the separator off-screen
+/// (observed: 5524 on a 1512-pt screen) — where it hides nothing, so the launch
+/// swallow-check reads it as healthy and keeps it, stranding the layout every
+/// launch. Reject anything outside the on-screen range, mirroring the bounds
+/// `separatorCapturePosition` already enforces on write, so what we refuse to
+/// restore is exactly what we would never have written.
+func isValidRestoredPosition(_ value: CGFloat, screenWidth: CGFloat) -> Bool {
+    value > 0 && value < screenWidth
+}
