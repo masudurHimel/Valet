@@ -31,6 +31,10 @@ final class MenuBarManager {
 
     init(store: SettingsStore) {
         self.store = store
+        // Drop any corrupted preferred-position macOS restored before we create
+        // the status items, so a stray past drag can't strand a separator
+        // off-screen (see sanitizeRestoredSeparatorPositions).
+        Self.sanitizeRestoredSeparatorPositions()
         // Creation order matters: newer status items appear further LEFT,
         // so create chevron first -> [alwaysHiddenSep][hiddenSep][chevron].
         chevronItem = makeChevron()
@@ -71,6 +75,38 @@ final class MenuBarManager {
         }
         hiddenSeparator = makeSeparator(autosaveName: "valet-hidden-separator")
         alwaysHiddenSeparator = makeSeparator(autosaveName: "valet-always-hidden-separator")
+    }
+
+    /// Discard any restored "NSStatusItem Preferred Position" that would place a
+    /// separator off-screen (see `isValidRestoredPosition`). macOS writes these
+    /// keys on user drags, and a bad value parks the separator where it hides
+    /// nothing — which the launch swallow-check reads as healthy, so it survives
+    /// every launch. Removing the key lets the separator spawn at the far-left
+    /// anchor (clean all-Shown state) instead. Called before the status items
+    /// are created, so macOS never restores the bad value in the first place.
+    static func sanitizeRestoredSeparatorPositions() {
+        let screenWidth = NSScreen.screens.map { $0.frame.width }.max() ?? 0
+        guard screenWidth > 0 else { return }
+        for name in ["valet-hidden-separator", "valet-always-hidden-separator"] {
+            let key = "NSStatusItem Preferred Position \(name)"
+            guard UserDefaults.standard.object(forKey: key) != nil else { continue }
+            let value = CGFloat(UserDefaults.standard.double(forKey: key))
+            if !isValidRestoredPosition(value, screenWidth: screenWidth) {
+                persistenceLog.notice("sanitize: DROP \(name, privacy: .public) invalid restored position \(value, privacy: .public) (screenWidth \(screenWidth, privacy: .public))")
+                UserDefaults.standard.removeObject(forKey: key)
+            }
+        }
+    }
+
+    /// Return Valet to a clean slate without a quit/reinstall: forget every
+    /// section assignment, clear the saved separator positions and rebuild the
+    /// separators at the far-left anchor, then collapse. Equivalent to
+    /// `defaults delete app.valet.Valet` for the layout/assignment keys.
+    func reset() {
+        store.assignments = [:]
+        resetSeparatorPositions()
+        engine.collapse()
+        apply()
     }
 
     func toggle() {
@@ -148,6 +184,9 @@ final class MenuBarManager {
         let showAll = NSMenuItem(title: "Show All Items", action: #selector(showAllItems), keyEquivalent: "")
         showAll.target = self
         menu.addItem(showAll)
+        let resetItem = NSMenuItem(title: "Reset", action: #selector(resetFromMenu), keyEquivalent: "")
+        resetItem.target = self
+        menu.addItem(resetItem)
         let settings = NSMenuItem(title: "Settings…", action: #selector(openSettings), keyEquivalent: ",")
         settings.target = self
         menu.addItem(settings)
@@ -165,6 +204,10 @@ final class MenuBarManager {
     @objc private func showAllItems() {
         // Always end in .revealedAll (toggleAll alternates revealedAll <-> collapsed).
         if engine.state != .revealedAll { toggleAll() }
+    }
+
+    @objc private func resetFromMenu() {
+        reset()
     }
 
     /// macOS writes "NSStatusItem Preferred Position" only when the user

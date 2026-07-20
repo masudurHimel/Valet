@@ -83,3 +83,26 @@ import Testing
         #expect(pos == nil)
     }
 }
+
+@Suite struct RestoredPositionValidationTests {
+    private let width: CGFloat = 1512
+
+    @Test func acceptsNormalMidBarPosition() {
+        #expect(isValidRestoredPosition(551, screenWidth: width))
+        #expect(isValidRestoredPosition(1, screenWidth: width))
+        #expect(isValidRestoredPosition(1511, screenWidth: width))
+    }
+
+    @Test func rejectsCorruptedOffScreenPosition() {
+        // The macOS-written value from the 2026-07-19 session that stranded the
+        // hidden separator far off-screen every launch.
+        #expect(!isValidRestoredPosition(5524, screenWidth: width))
+    }
+
+    @Test func rejectsZeroNegativeAndAtOrBeyondEdge() {
+        #expect(!isValidRestoredPosition(0, screenWidth: width))
+        #expect(!isValidRestoredPosition(-10, screenWidth: width))
+        #expect(!isValidRestoredPosition(width, screenWidth: width))
+        #expect(!isValidRestoredPosition(width + 1, screenWidth: width))
+    }
+}
